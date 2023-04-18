@@ -10,12 +10,10 @@ import (
 var db *sql.DB
 
 // InitDB initializes the database connection
-func InitDB() error {
+func InitDB(connectionString string) error {
 	// Set up database connection parameters
-	dsn := "1u22we81krq1ti8t0msn:pscale_pw_j29YzPIeTmZgFcJsVso2SqeXLvUpMmiIpNSUEsNFGKI@tcp(aws.connect.psdb.cloud)/worktracker?tls=true"
-
 	// Open a new database connection
-	conn, err := sql.Open("mysql", dsn)
+	conn, err := sql.Open("mysql", connectionString)
 	if err != nil {
 		return err
 	}
