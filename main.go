@@ -15,6 +15,7 @@ func main() {
 
 	r.Use(middleware.Logger)
 	err := db.InitDB()
+	defer db.CloseDB()
 	if err != nil {
 		panic(err)
 	}
