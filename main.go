@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/Natcel0711/workTracker/api"
@@ -24,7 +23,5 @@ func main() {
 		panic(err)
 	}
 	api.SetupRoutes(r)
-
-	fmt.Println("Listening on port :3000")
 	http.ListenAndServe(":"+config.Port, r)
 }

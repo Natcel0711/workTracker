@@ -64,7 +64,14 @@ func GetTimesheet(w http.ResponseWriter, r *http.Request) {
 	// Return the timesheets as JSON response
 	// Note: You can customize the response format according to your needs
 	// For example, you can use a JSON encoding library like encoding/json to serialize the timesheets
-	fmt.Fprintf(w, "%v", timesheets)
+	jsonBytes, err := json.Marshal(timesheets)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	jsonString := string(jsonBytes)
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(jsonString))
 }
 
 func CreateTimesheet(w http.ResponseWriter, r *http.Request) {
