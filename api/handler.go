@@ -35,7 +35,7 @@ func GetTimesheet(w http.ResponseWriter, r *http.Request) {
 	dbConn := db.GetDB()
 
 	// Query timesheet entries from the database
-	rows, err := dbConn.Query("SELECT id, company_name, hours_worked, date_worked, created_at FROM timesheet")
+	rows, err := dbConn.Query("SELECT id, company_name, hours_worked, date_worked, incident, resolved, created_at FROM timesheet")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -46,7 +46,7 @@ func GetTimesheet(w http.ResponseWriter, r *http.Request) {
 	var timesheets []Timesheet
 	for rows.Next() {
 		var timesheet Timesheet
-		err := rows.Scan(&timesheet.ID, &timesheet.CompanyName, &timesheet.HoursWorked, &timesheet.DateWorked, &timesheet.CreatedAt)
+		err := rows.Scan(&timesheet.ID, &timesheet.CompanyName, &timesheet.HoursWorked, &timesheet.DateWorked, &timesheet.Incident, &timesheet.Resolved, &timesheet.CreatedAt)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -92,8 +92,8 @@ func CreateTimesheet(w http.ResponseWriter, r *http.Request) {
 	timesheet.CreatedAt = time.Now()
 	dbConn := db.GetDB()
 
-	result, err := dbConn.Exec("INSERT INTO timesheet (company_name, hours_worked, date_worked, created_at) VALUES (?, ?, ?, ?)",
-		timesheet.CompanyName, timesheet.HoursWorked, dateWorked, timesheet.CreatedAt)
+	result, err := dbConn.Exec("INSERT INTO timesheet (company_name, hours_worked, date_worked, incident, resolved, created_at) VALUES (?, ?, ?, ?)",
+		timesheet.CompanyName, timesheet.HoursWorked, dateWorked, timesheet.Incident, timesheet.Resolved, timesheet.CreatedAt)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintf(w, "Failed to insert timesheet: %v", err)
@@ -137,8 +137,8 @@ func UpdateTimesheet(w http.ResponseWriter, r *http.Request) {
 	}
 	dbConn := db.GetDB()
 	// Update timesheet in MySQL table
-	result, err := dbConn.Exec("UPDATE timesheet SET company_name=?, hours_worked=?, date_worked=? WHERE id=?",
-		timesheet.CompanyName, timesheet.HoursWorked, dateWorked, timesheet.ID)
+	result, err := dbConn.Exec("UPDATE timesheet SET company_name=?, hours_worked=?, date_worked=?, incident=?, resolved=? WHERE id=?",
+		timesheet.CompanyName, timesheet.HoursWorked, dateWorked, timesheet.Incident, timesheet.Resolved, timesheet.ID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintf(w, "Failed to update timesheet: %v", err)
