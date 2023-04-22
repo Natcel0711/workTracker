@@ -10,7 +10,7 @@ type Timesheet struct {
 	CompanyName string         `db:"company_name" json:"company_name"`
 	HoursWorked float64        `db:"hours_worked" json:"hours_worked"`
 	Incident    string         `db:"incident" json:"incident"`
-	Resolved    bool           `db:"resolved" json:"resolved"`
+	Resolved    string         `db:"resolved" json:"resolved"`
 	DateWorked  MySQLDate      `db:"date_worked" json:"date_worked"`
 	CreatedAt   MySQLTimestamp `db:"created_at" json:"created_at"`
 }
@@ -21,7 +21,7 @@ type TimesheetCreate struct {
 	HoursWorked float64   `json:"hours_worked"`
 	DateWorked  string    `json:"date_worked"`
 	Incident    string    `db:"incident"`
-	Resolved    bool      `db:"resolved"`
+	Resolved    string    `db:"resolved"`
 	CreatedAt   time.Time `json:"created_at,omitempty"`
 }
 
